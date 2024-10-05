@@ -1,6 +1,4 @@
-import { AuthorizeRequest } from "./types";
-
-const ALLOW_LIST = [".glb", ".jpg", ".jpeg"];
+const ALLOW_LIST = [".glb", ".jpg", ".jpeg", ".png", ".gltf", ".bin"];
 
 // Check requests for a pre-shared secret
 const hasValidHeader = (request: Request, env: Env): boolean => {
