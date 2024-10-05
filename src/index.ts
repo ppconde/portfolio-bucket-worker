@@ -11,8 +11,39 @@
  * Learn more at https://developers.cloudflare.com/workers/
  */
 
+import { authorizeRequest } from "./authorize";
+
 export default {
-	async fetch(request, env, ctx): Promise<Response> {
-		return new Response('Hello World!');
+	async fetch(request, env) {
+		const url = new URL(request.url);
+		const key = url.pathname.slice(1);
+
+		if (!authorizeRequest(request, env, key)) {
+			return new Response("Forbidden", { status: 403 });
+		}
+
+		switch (request.method) {
+			case "GET":
+				const object = await env.PORTFOLIO_BUCKET.get(key);
+
+				if (object === null) {
+					return new Response("Object Not Found", { status: 404 });
+				}
+
+				const headers = new Headers();
+				object.writeHttpMetadata(headers);
+				headers.set("etag", object.httpEtag);
+
+				return new Response(object.body, {
+					headers,
+				});
+			default:
+				return new Response("Method Not Allowed", {
+					status: 405,
+					headers: {
+						Allow: "GET",
+					},
+				});
+		}
 	},
 } satisfies ExportedHandler<Env>;
