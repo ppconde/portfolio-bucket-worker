@@ -16,9 +16,10 @@ import { authorizeRequest } from "./authorize";
 export default {
 	async fetch(request, env) {
 		const url = new URL(request.url);
-		const key = url.pathname.slice(1);
+		// Trim trailing slash
+		const key = url.pathname.slice(1).replace(/\/$/, "");
 
-		if (!authorizeRequest(request, env, key)) {
+		if (!authorizeRequest(request, key)) {
 			return new Response("Forbidden", { status: 403 });
 		}
 
@@ -31,6 +32,9 @@ export default {
 				}
 
 				const headers = new Headers();
+				if (env.ENVIRONMENT === "development") {
+					headers.append("Access-Control-Allow-Origin", "*");
+				}
 				object.writeHttpMetadata(headers);
 				headers.set("etag", object.httpEtag);
 
