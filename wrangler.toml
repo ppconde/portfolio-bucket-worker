@@ -100,6 +100,7 @@ enabled = true
 [[r2_buckets]]
 binding = "PORTFOLIO_BUCKET"
 bucket_name = "portfolio-bucket"
+preview_bucket_name="preview-portfolio-bucket"
 
 # Bind another Worker service. Use this binding to call another Worker without network overhead.
 # Docs: https://developers.cloudflare.com/workers/wrangler/configuration/#service-bindings
