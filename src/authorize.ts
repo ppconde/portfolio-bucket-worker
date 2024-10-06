@@ -11,7 +11,7 @@ export function authorizeRequest(request: Request, env: Env, key: string): boole
         case "DELETE":
             return hasValidHeader(request, env);
         case "GET":
-            return ALLOW_LIST.some((ext) => new RegExp(`${ext}?/`, 'i').test(key));
+            return ALLOW_LIST.some((ext) => new RegExp(`${ext}/?`, 'i').test(key));
         default:
             return false;
     }
