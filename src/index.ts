@@ -32,11 +32,8 @@ export default {
 				}
 
 				const headers = new Headers();
-				if (env.ENVIRONMENT === "development") {
+				if (env.ENVIRONMENT === "development" || env.ENVIRONMENT === "production") {
 					headers.append("Access-Control-Allow-Origin", "*");
-				}
-				if (env.ENVIRONMENT === "production") {
-					headers.append("Access-Control-Allow-Origin", "https://*.portfolio-*.pages.dev, https://ppconde.com");
 				}
 				object.writeHttpMetadata(headers);
 				headers.set("etag", object.httpEtag);
